@@ -1,5 +1,7 @@
 # Meal Planning with Python and Networkx
 
+Blog Post: https://scottjenkinstoday.com/meal-planning-with-python-and-networkx/
+
 Not sure what to cook from a list of recipes? This notebook produces a plan for the days ahead, and emails you your shopping list.
 
 It uses the networkx graphing package. Each meal is a node, and 'legal' edges exist between nodes if and only if the meals contain different proteins and carbohydrates.
