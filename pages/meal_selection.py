@@ -17,9 +17,11 @@ with conn.session as s:
     s.commit()
 
 def get_pet_owners(conn):
+  st.cache_data.clear()
+  
   # Function to query pet_owners table
   query = "select * from pet_owners"
-  all_owners = conn.query(sql=query, ttl=5)
+  all_owners = conn.query(sql=query, ttl=0)
   return all_owners
 
 # Display table contents
@@ -35,6 +37,7 @@ with st.form('Test form'):
     st.write(submitted)
 
 def insert_pet_owner(conn, person, pet):
+    # st.cache_data()
     # Function to add pet-owner to pet_owners table
     try:
         with conn.session as s:
@@ -47,6 +50,7 @@ def insert_pet_owner(conn, person, pet):
 
 if submitted:
   print("Form submitted")  # Confirmation message for form submission
+ 
   insert_pet_owner(conn, owner, pet)
   # Update query and display
   all_owners = get_pet_owners(conn)
