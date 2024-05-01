@@ -14,6 +14,7 @@ query = """SELECT *
             FROM meal_plan
             WHERE dt_created = (SELECT MAX(dt_created) AS ts FROM meal_plan)
         """
+st.cache_data.clear()
 db_meals = meal_plan_conn.query(query) # 'select * from meal_plan where dt_created = (SELECT MAX(dt_created) FROM meal_plan')
 st.write('planned_meals table')
 st.dataframe(db_meals)
