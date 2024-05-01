@@ -19,7 +19,7 @@ with conn.session as s:
 def get_pet_owners(conn):
   # Function to query pet_owners table
   query = "select * from pet_owners"
-  all_owners = conn.query(sql=query)
+  all_owners = conn.query(sql=query, ttl=5)
   return all_owners
 
 # Display table contents
