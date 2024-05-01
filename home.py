@@ -46,9 +46,9 @@ with st.form('Meal Planner Form'):
         ## Insert some data with conn.session.
         with meal_plan_conn.session as s:
             # Delete all rows from the planned_meals table
-            # delete_query = delete('planned_meals')
-            # s.execute(delete_query)
-            # st.write('dropped table.')
+            delete_query = delete('planned_meals')
+            s.execute(delete_query)
+            st.write('dropped table.')
             s.execute(text('CREATE TABLE IF NOT EXISTS planned_meals (date TEXT, meal TEXT);'))
             meals = dict(zip(date_list, meal_names))
             for k in meals:
