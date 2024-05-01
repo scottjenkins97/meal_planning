@@ -7,7 +7,12 @@ import datetime as dt
 import numpy as np
 
 
-meal_plan_conn = st.connection('meal_plan_db', type='sql', autocommit=True, )
+st.cache_data.clear()
+meal_plan_conn = st.connection(name = 'meal_plan_db', 
+                               type = 'sql',
+                               autocommit = True,
+                               max_entries = 100,
+                               ttl = 300)
 
 # Get latest meal_plan
 query = """SELECT *
