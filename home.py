@@ -7,7 +7,11 @@ import datetime as dt
 import numpy as np
 
 
-meal_plan_conn = st.connection('meal_plan_db', type='sql',autocommit=True)
+meal_plan_conn = st.connection(name = 'meal_plan_db', 
+                               type = 'sql',
+                               autocommit = True,
+                               max_entries = 100,
+                               ttl = 300)
 
 # DATABASE_URL = 'sqlite:///meal_plan.db'  # Replace with your actual connection string
 # engine = create_engine(DATABASE_URL)
