@@ -12,14 +12,13 @@ meal_plan_conn = st.connection(name = 'meal_plan_db',
                                type = 'sql',
                                autocommit = True,
                                max_entries = 100,
-                               ttl = 300)
+                               ttl = 0)
 
 # Get latest meal_plan
 query = """SELECT *
             FROM meal_plan
             WHERE dt_created = (SELECT MAX(dt_created) AS ts FROM meal_plan)
         """
-st.cache_data.clear()
 db_meals = meal_plan_conn.query(query) # 'select * from meal_plan where dt_created = (SELECT MAX(dt_created) FROM meal_plan')
 st.write('planned_meals table')
 st.dataframe(db_meals)
