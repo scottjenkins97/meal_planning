@@ -49,18 +49,19 @@ with st.form('Meal Planner Form'):
         ## Insert some data with conn.session.
         with meal_plan_conn.session as s:
             # Delete all rows from the planned_meals table
-            s.execute(text('DROP TABLE planned_meals'))
+            # s.execute(text('DROP TABLE planned_meals'))
 
-            s.execute(text('CREATE TABLE IF NOT EXISTS planned_meals (date TEXT, meal TEXT);'))
+            s.execute(text('CREATE TABLE IF NOT EXISTS meal_plan (dt_created DATETIME, date TEXT, meal TEXT);'))
             meals = dict(zip(date_list, meal_names))
             for k in meals:
+                st.write(k, meals[k])
                 s.execute(text(
-                    'INSERT INTO planned_meals (date, meal) VALUES (:date, :meal);'),
-                    params=dict(date=k, meal=meals[k])
+                    f'INSERT INTO meal_plan (dt_created, date, meal) VALUES (:dt_created, :date, :meal);'),
+                    params=dict(dt_created = time_now, date=k, meal=meals[k])
                 )
             s.commit()
 
-        db_meals = meal_plan_conn.query('select * from planned_meals')
+        db_meals = meal_plan_conn.query('select * from meal_plan')
         st.write('planned_meals table')
         st.dataframe(db_meals)
 
