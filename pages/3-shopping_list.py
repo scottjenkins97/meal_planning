@@ -11,6 +11,12 @@ meal_plan_conn = st.connection(name = 'meal_plan_db',
                                max_entries = 100,
                                ttl = 0)
 
+shopping_list_conn = st.connection(name = 'shopping_list_db', 
+                               type = 'sql',
+                               autocommit = True,
+                               max_entries = 100,
+                               ttl = 0)
+
 # Source latest meal plan with utils function
 db_meals, meal_dates, meal_names = get_latest_meal_plan(meal_plan_conn)
 st.write(db_meals)
@@ -45,6 +51,6 @@ with st.form("Shopping List Form"):
     submitted = st.form_submit_button("Finalise Shopping List.") 
 
 if submitted:
-    insert_shopping_list(meal_plan_conn, meal_shopping_list)
+    insert_shopping_list(shopping_list_conn, meal_shopping_list)
 
     
