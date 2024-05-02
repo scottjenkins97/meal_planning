@@ -1,43 +1,31 @@
+import hmac
 import streamlit as st
-import streamlit_authenticator as stauth
-import yaml
-from yaml.loader import SafeLoader
 
-def st_authenticator():
-    with open('secrets.yml') as file:
-        config = yaml.load(file, Loader=SafeLoader)
+def check_password():
+    """Returns `True` if the user had the correct password."""
 
-    authenticator = stauth.Authenticate(
-        config['credentials'],
-        config['cookie']['name'],
-        config['cookie']['key'],
-        config['cookie']['expiry_days'],
-        config['preauthorized']
+    def password_entered():
+        """Checks whether a password entered by the user is correct."""
+        if hmac.compare_digest(st.session_state["password"], st.secrets["password"]):
+            st.session_state["password_correct"] = True
+            del st.session_state["password"]  # Don't store the password.
+        else:
+            st.session_state["password_correct"] = False
+
+    # Return True if the password is validated.
+    if st.session_state.get("password_correct", False):
+        return True
+
+    # Show input for password.
+    st.text_input(
+        "Password", type="password", on_change=password_entered, key="password"
     )
+    if "password_correct" in st.session_state:
+        st.error("😕 Password incorrect")
+    return False
 
-    return authenticator
+if not check_password():
+    st.stop()  # Do not continue if check_password is not True.
 
-
-authenticator = st_authenticator()
-name, authentication_status, username = authenticator.login(location='main',
-                                                            max_concurrent_users = 3,
-                                                            max_login_attempts = 3)
-
-
-if authentication_status:
-    st.session_state.authentication_status = True
-    authenticator.logout('**Logout**', 'main', key='unique_key')
-    st.write(f"Welcome {name}! Please move to the 'generate meal plan' page to get started.")
-    
-elif authentication_status is False:
-    st.session_state.authentication_status = False
-    st.error('Username/password is incorrect')
-elif authentication_status is None:
-    st.session_state.authentication_status = None
-    st.warning('Please enter your username and password')
-
-
-
-
-
-
+# Main Streamlit app starts here
+st.write("Welcome to Scott & Jess's Meal Planner!")

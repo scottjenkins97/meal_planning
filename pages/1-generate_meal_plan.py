@@ -8,6 +8,10 @@ from utils import generate_meal_graph, generate_meal_plan, insert_meals
 #     st.info('Please Login from the Home page and try again.')
 #     st.stop()
 
+if st.session_state.get("password_correct", False):
+    st.info('Please Login from the Home page and try again.')
+    st.stop()  # Do not continue
+
 # Initialise connection to sqlite database
 meal_plan_conn = st.connection(name = 'meal_plan_db', 
                             type = 'sql',
