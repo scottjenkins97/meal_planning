@@ -60,6 +60,26 @@ def insert_meals(meal_plan_conn, date_list, meal_names,verbose = True):
     except Exception as e:
         st.write(f"Error inserting meals: {e}")
 
+def insert_shopping_list(meal_plan_conn, meal_shopping_list):
+     # Get current timestamp to insert into db table
+    time_now = dt.datetime.now()
+    # Convert shopping list to a string for storing in database table
+    shopping_list_string = ', '.join([str(item) for item in meal_shopping_list])
+    st.write(shopping_list_string)
+    try:
+        with meal_plan_conn.session as s:
+            s.execute(text('CREATE TABLE IF NOT EXISTS shopping_list (dt_created DATETIME, shopping_list TEXT);'))
+            s.execute(text(
+                f'INSERT INTO shopping_list (dt_created, shopping_list) VALUES (:dt_created, :shopping_list,);'),
+                params=dict(dt_created = time_now, shopping_list = shopping_list_string)
+            )
+        s.commit()
+        st.write('Email Meal Plan & Shopping List prepared. **Awaiting review.**')
+    except Exception as e:
+        st.write(f"Error inserting shopping list: {e}")
+
+
+
 
 def get_latest_meal_plan(meal_plan_conn):
     # Extract meal data generated with latest dt_created
@@ -73,3 +93,16 @@ def get_latest_meal_plan(meal_plan_conn):
     meal_names = db_meals['meal']
 
     return db_meals, meal_dates, meal_names
+
+
+def get_latest_shopping_list(meal_plan_conn):
+    # Extract meal data generated with latest dt_created
+    query = """SELECT *
+                FROM shopping_list
+                WHERE dt_created = (SELECT MAX(dt_created) AS ts FROM shopping_list)
+            """
+    db_shopping_list = meal_plan_conn.query(query)
+
+    shopping_list = db_shopping_list['shopping_list']
+   
+    return db_shopping_list, shopping_list
