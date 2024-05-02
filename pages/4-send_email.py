@@ -21,22 +21,22 @@ shopping_list_conn = st.connection(name = 'shopping_list_db',
                                autocommit = True,
                                max_entries = 100,
                                ttl = 0)
-if st.button("Refresh"):
-    db_meals, meal_dates, meal_names = get_latest_meal_plan(meal_plan_conn)
-    db_shopping_list, shopping_list = get_latest_shopping_list(shopping_list_conn)
 
-    # Add in the departments for each item in the shopping list
-    ingredient_df = pd.read_excel('meals.xlsx',sheet_name='ingredients')
-    shopping_df = ingredient_df[ingredient_df['food_name'].isin(shopping_list)].sort_values('department_id')[['food_name','department_name']].reset_index(drop=True)
+db_meals, meal_dates, meal_names = get_latest_meal_plan(meal_plan_conn)
+db_shopping_list, shopping_list = get_latest_shopping_list(shopping_list_conn)
 
-    meals_df = db_meals[['date','meal']]  
-    start_date = meals_df['date'][0]
+# Add in the departments for each item in the shopping list
+ingredient_df = pd.read_excel('meals.xlsx',sheet_name='ingredients')
+shopping_df = ingredient_df[ingredient_df['food_name'].isin(shopping_list)].sort_values('department_id')[['food_name','department_name']].reset_index(drop=True)
 
-    # Display plan and shopping list (with indices removed)
-    st.dataframe(meals_df,hide_index=True) 
-    st.dataframe(shopping_df,hide_index=True) 
+meals_df = db_meals[['date','meal']]  
+start_date = meals_df['date'][0]
 
-    # Click button to send emails.
-    if st.button("Send Email with Meal Plan and Shopping List"):
-        st.text("Sending emails...")
-        send_email(start_date, meals_df,shopping_df)
+# Display plan and shopping list (with indices removed)
+st.dataframe(meals_df,hide_index=True) 
+st.dataframe(shopping_df,hide_index=True) 
+
+# Click button to send emails.
+if st.button("Send Email with Meal Plan and Shopping List"):
+    st.text("Sending emails...")
+    send_email(start_date, meals_df,shopping_df)
