@@ -5,6 +5,7 @@ import numpy as np
 import datetime as dt
 from sqlalchemy.sql import text, delete
 import streamlit as st
+import yagmail
 
 def generate_meal_graph(meal_df):
     # Create Graph of Legal Consecutive Meals
@@ -71,8 +72,6 @@ def insert_shopping_list(shopping_list_conn, meal_shopping_list):
             s.execute(text('CREATE TABLE IF NOT EXISTS grocery_list (dt_created DATETIME, groceries TEXT);'))
             st.write(time_now)
             st.write(shopping_list_string)
-            test_params=dict(dt_created = time_now, shopping_list = 'apples')
-            st.write('test_params:', test_params)
             s.execute(text(
                 f'INSERT INTO grocery_list (dt_created, groceries) VALUES (:dt_created, :shopping_list);'),
                 params=dict(dt_created = time_now, shopping_list = shopping_list_string)
@@ -104,6 +103,34 @@ def get_latest_shopping_list(shopping_list_conn):
             """
     db_shopping_list = shopping_list_conn.query(query)
 
-    shopping_list = db_shopping_list['groceries'][0]
+    shopping_list = db_shopping_list['groceries'][0].split(', ')
    
     return db_shopping_list, shopping_list
+
+def send_email(start_date, meals_df, shopping_df):
+    user = st.secrets["EMAIL"]
+    app_password = st.secrets["GMAIL_APP_PASSWORD"]
+    recipients = st.secrets["EMAIL_RECIPIENTS"]
+    recipient_list = [x for x in recipients.split(', ')]
+   
+    subject = f'Meal Plan: {start_date}'
+    content = [ '<br>',
+                'Hello,',
+                '<br>',
+                "Thank you for using our couple's meal planner!", 
+                '<br>',
+                'Here is our meal plan for the next few days',
+                '<br>',
+                meals_df,
+                '<br>',
+                'And here is our corresponding shopping list',
+                '<br>',
+                shopping_df,
+                '<br>',
+                'Happy Cooking!',
+              ]
+
+    for to in recipient_list:
+        with yagmail.SMTP(user, app_password) as yag:
+            yag.send(to, subject, content)
+            st.write(f'Sent email successfully to {to}')
