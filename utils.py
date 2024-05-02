@@ -73,7 +73,7 @@ def insert_shopping_list(shopping_list_conn, meal_shopping_list):
                 f'INSERT INTO grocery_list (dt_created, groceries) VALUES (:dt_created, :shopping_list);'),
                 params=dict(dt_created = time_now, shopping_list = shopping_list_string)
             )
-            s.commit()
+        s.commit()
         st.write('Email Meal Plan & Shopping List prepared. **Awaiting review.**')
     except Exception as e:
         st.write(f"Error inserting shopping list: {e}")
@@ -131,3 +131,5 @@ def send_email(start_date, meals_df, shopping_df):
         with yagmail.SMTP(user, app_password) as yag:
             yag.send(to, subject, content)
             st.write(f'Sent email successfully to {to}')
+
+    st.write('Thanks, see you again soon!')

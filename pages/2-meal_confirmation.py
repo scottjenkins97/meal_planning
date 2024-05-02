@@ -55,9 +55,3 @@ if submitted:
     insert_meals(meal_plan_conn, meal_dates, meal_names, verbose=False)
     st.write('Meals Confirmed. Shopping List Ready for inspection')
     
-    # query = """SELECT *
-    #         FROM meal_plan
-    #         WHERE dt_created = (SELECT MAX(dt_created) AS ts FROM meal_plan)
-    #     """
-    # db_meals = meal_plan_conn.query(query)
-    # st.write(db_meals)

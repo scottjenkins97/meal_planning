@@ -8,13 +8,14 @@ meal_plan_conn = st.connection(name = 'meal_plan_db',
                                type = 'sql',
                                autocommit = True,
                                max_entries = 100,
-                               ttl = 10)
+                               ttl = 0)
 
+st.cache_data.clear()
 shopping_list_conn = st.connection(name = 'shopping_list_db', 
                                type = 'sql',
                                autocommit = True,
                                max_entries = 100,
-                               ttl = 10)
+                               ttl = 0)
 
 # Source latest meal plan with utils function
 db_meals, meal_dates, meal_names = get_latest_meal_plan(meal_plan_conn)
@@ -24,8 +25,6 @@ st.write(db_meals)
 # Load Meal and ingredient lists from spreadsheet
 meal_df = pd.read_excel('meals.xlsx',sheet_name='meal_df')
 ingredient_df = pd.read_excel('meals.xlsx',sheet_name='ingredients')
-# Create to_buy column, set all values to False 
-ingredient_df['to_buy'] = False
 
 # Create initial shopping list of ingredients for selected meals
 meal_shopping_list = []
@@ -33,10 +32,6 @@ for meal in meal_names:
     ingredients = meal_df[meal_df['meal_name']==meal]['ingredients']
     # Get unique list of required ingredients
     meal_shopping_list = list(set(list(np.concatenate((meal_shopping_list,ingredients.values[0].split(',')), axis=0))))
-
-# # Set 'to_buy' value as True for ingredients in meal_shopping_list
-# for ingredient in meal_shopping_list:
-#     ingredient_df.loc[ingredient_df['food_name']==ingredient,['to_buy']] = True
 
 # Multiselect Form to modify shopping list
 with st.form("Shopping List Form"):
