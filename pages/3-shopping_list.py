@@ -43,9 +43,13 @@ with st.form("Shopping List Form"):
     st.write("Modify Shopping List")
     if meal_shopping_list not in st.session_state:
         st.session_state['shopping_list'] = meal_shopping_list
-        final_shopping_list = st.multiselect(label = 'Shopping List',options = ingredient_df['food_name'],default = meal_shopping_list,)   
+        final_shopping_list = st.multiselect(label = 'Shopping List',
+                                             options = ingredient_df['food_name'],
+                                             default = meal_shopping_list,)   
     else:
-        final_shopping_list = st.multiselect(label = 'Shopping List',options = ingredient_df['food_name'],default = st.session_state[meal_shopping_list],)
+        final_shopping_list = st.multiselect(label = 'Shopping List',
+                                             options = ingredient_df['food_name'],
+                                             default = st.session_state[meal_shopping_list],)
         meal_shopping_list = final_shopping_list
     submitted = st.form_submit_button("Finalise Shopping List.") 
 

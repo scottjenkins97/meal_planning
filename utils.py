@@ -66,12 +66,9 @@ def insert_shopping_list(shopping_list_conn, meal_shopping_list):
     time_now = dt.datetime.now()
     # Convert shopping list to a string for storing in database table
     shopping_list_string = str(', '.join([str(item) for item in meal_shopping_list]))
-    st.write(shopping_list_string)
     try:
         with shopping_list_conn.session as s:
             s.execute(text('CREATE TABLE IF NOT EXISTS grocery_list (dt_created DATETIME, groceries TEXT);'))
-            st.write(time_now)
-            st.write(shopping_list_string)
             s.execute(text(
                 f'INSERT INTO grocery_list (dt_created, groceries) VALUES (:dt_created, :shopping_list);'),
                 params=dict(dt_created = time_now, shopping_list = shopping_list_string)
