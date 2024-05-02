@@ -73,15 +73,11 @@ def insert_shopping_list(shopping_list_conn, meal_shopping_list):
             st.write(shopping_list_string)
             test_params=dict(dt_created = time_now, shopping_list = 'apples')
             st.write('test_params:', test_params)
-            # s.execute(text(
-            #     f'INSERT INTO shopping_list (dt_created, shopping_list) VALUES (:dt_created, :shopping_list,);'),
-            #     params=dict(dt_created = time_now, shopping_list = shopping_list_string)
-            # )
             s.execute(text(
-                f'INSERT INTO grocery_list (dt_created, groceries) VALUES (:dt_created, :shopping_list,);'),
-                params=dict(dt_created = time_now, shopping_list = "apples")
+                f'INSERT INTO shopping_list (dt_created, shopping_list) VALUES (:dt_created, :shopping_list,);'),
+                params=dict(dt_created = time_now, shopping_list = shopping_list_string)
             )
-        s.commit()
+            s.commit()
         st.write('Email Meal Plan & Shopping List prepared. **Awaiting review.**')
     except Exception as e:
         st.write(f"Error inserting shopping list: {e}")
