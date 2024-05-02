@@ -3,19 +3,18 @@ import pandas as pd
 from utils import get_latest_meal_plan, insert_shopping_list
 import numpy as np
 
-# Select the latest meals
 st.cache_data.clear()
 meal_plan_conn = st.connection(name = 'meal_plan_db', 
                                type = 'sql',
                                autocommit = True,
                                max_entries = 100,
-                               ttl = 0)
+                               ttl = 10)
 
 shopping_list_conn = st.connection(name = 'shopping_list_db', 
                                type = 'sql',
                                autocommit = True,
                                max_entries = 100,
-                               ttl = 0)
+                               ttl = 10)
 
 # Source latest meal plan with utils function
 db_meals, meal_dates, meal_names = get_latest_meal_plan(meal_plan_conn)
@@ -35,9 +34,9 @@ for meal in meal_names:
     # Get unique list of required ingredients
     meal_shopping_list = list(set(list(np.concatenate((meal_shopping_list,ingredients.values[0].split(',')), axis=0))))
 
-# Set 'to_buy' value as True for ingredients in meal_shopping_list
-for ingredient in meal_shopping_list:
-    ingredient_df.loc[ingredient_df['food_name']==ingredient,['to_buy']] = 'True'
+# # Set 'to_buy' value as True for ingredients in meal_shopping_list
+# for ingredient in meal_shopping_list:
+#     ingredient_df.loc[ingredient_df['food_name']==ingredient,['to_buy']] = True
 
 # Multiselect Form to modify shopping list
 with st.form("Shopping List Form"):
@@ -51,6 +50,6 @@ with st.form("Shopping List Form"):
     submitted = st.form_submit_button("Finalise Shopping List.") 
 
 if submitted:
-    insert_shopping_list(shopping_list_conn, meal_shopping_list)
+    insert_shopping_list(shopping_list_conn, final_shopping_list)
 
     

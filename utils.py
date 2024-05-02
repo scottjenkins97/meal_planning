@@ -74,7 +74,7 @@ def insert_shopping_list(shopping_list_conn, meal_shopping_list):
             test_params=dict(dt_created = time_now, shopping_list = 'apples')
             st.write('test_params:', test_params)
             s.execute(text(
-                f'INSERT INTO shopping_list (dt_created, shopping_list) VALUES (:dt_created, :shopping_list,);'),
+                f'INSERT INTO grocery_list (dt_created, groceries) VALUES (:dt_created, :shopping_list);'),
                 params=dict(dt_created = time_now, shopping_list = shopping_list_string)
             )
             s.commit()
@@ -97,12 +97,13 @@ def get_latest_meal_plan(meal_plan_conn):
 
 def get_latest_shopping_list(shopping_list_conn):
     # Extract meal data generated with latest dt_created
+    st.cache_data.clear()
     query = """SELECT *
                 FROM grocery_list
                 WHERE dt_created = (SELECT MAX(dt_created) AS ts FROM grocery_list)
             """
     db_shopping_list = shopping_list_conn.query(query)
 
-    shopping_list = db_shopping_list['shopping_list']
+    shopping_list = db_shopping_list['groceries'][0]
    
     return db_shopping_list, shopping_list
