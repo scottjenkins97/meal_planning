@@ -4,10 +4,6 @@ from utils import insert_meals, get_latest_meal_plan
 import numpy as np
 
 
-# if not st.session_state.get('authentication_status', False):
-#     st.info('Please Login from the Home page and try again.')
-#     st.stop()
-
 # Load excel sheet of meals
 meal_df = pd.read_excel('meals.xlsx',sheet_name='meal_df')
 

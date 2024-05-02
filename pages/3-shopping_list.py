@@ -3,10 +3,6 @@ import pandas as pd
 from utils import get_latest_meal_plan, insert_shopping_list
 import numpy as np
 
-# if not st.session_state.get('authentication_status', False):
-#     st.info('Please Login from the Home page and try again.')
-#     st.stop()
-
 # Select the latest meals
 st.cache_data.clear()
 meal_plan_conn = st.connection(name = 'meal_plan_db', 

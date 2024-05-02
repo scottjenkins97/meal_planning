@@ -78,9 +78,6 @@ def insert_shopping_list(meal_plan_conn, meal_shopping_list):
     except Exception as e:
         st.write(f"Error inserting shopping list: {e}")
 
-
-
-
 def get_latest_meal_plan(meal_plan_conn):
     # Extract meal data generated with latest dt_created
     query = """SELECT *
@@ -93,7 +90,6 @@ def get_latest_meal_plan(meal_plan_conn):
     meal_names = db_meals['meal']
 
     return db_meals, meal_dates, meal_names
-
 
 def get_latest_shopping_list(meal_plan_conn):
     # Extract meal data generated with latest dt_created
