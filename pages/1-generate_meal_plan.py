@@ -8,7 +8,7 @@ from utils import generate_meal_graph, generate_meal_plan, insert_meals
 #     st.info('Please Login from the Home page and try again.')
 #     st.stop()
 
-if st.session_state.get("password_correct", False):
+if not st.session_state.get("password_correct"):
     st.info('Please Login from the Home page and try again.')
     st.stop()  # Do not continue
 
