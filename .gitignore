@@ -1,3 +1,6 @@
 .venv
 .env
 secrets.yml
+*.toml
+.streamlit/
+
