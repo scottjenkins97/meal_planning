@@ -93,7 +93,7 @@ def get_latest_meal_plan(meal_plan_conn):
 
 def get_latest_shopping_list(shopping_list_conn):
     # Extract meal data generated with latest dt_created
-    st.cache_data.clear()
+    # st.cache_data.clear()
     query = """SELECT *
                 FROM grocery_list
                 WHERE dt_created = (SELECT MAX(dt_created) AS ts FROM grocery_list)

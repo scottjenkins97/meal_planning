@@ -3,14 +3,14 @@ import pandas as pd
 from utils import get_latest_meal_plan, insert_shopping_list
 import numpy as np
 
-st.cache_data.clear()
+# st.cache_data.clear()
 meal_plan_conn = st.connection(name = 'meal_plan_db', 
                                type = 'sql',
                                autocommit = True,
                                max_entries = 100,
                                ttl = 0)
 
-st.cache_data.clear()
+# st.cache_data.clear()
 shopping_list_conn = st.connection(name = 'shopping_list_db', 
                                type = 'sql',
                                autocommit = True,

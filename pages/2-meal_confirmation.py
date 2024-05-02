@@ -7,7 +7,7 @@ import numpy as np
 # Load excel sheet of meals
 meal_df = pd.read_excel('meals.xlsx',sheet_name='meal_df')
 
-st.cache_data.clear()
+# st.cache_data.clear()
 meal_plan_conn = st.connection(name = 'meal_plan_db', 
                                type = 'sql',
                                autocommit = True,
